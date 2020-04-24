@@ -1,4 +1,5 @@
 import * as actionTypes from '../actions/actionTypes';
+import {updateObject} from '../utility';
 
 const initialState = {
     ingredients: null,
@@ -13,45 +14,48 @@ const INGREDIENT_PRICES = {
     bacon: 0.7
 };
 
+const addIng = (state, action) => {
+    const updatedIngredient = { [action.ingType]: state.ingredients[action.ingType] + 1 };
+    const updatedIngredients = updateObject(state.ingredients,updatedIngredient);
+    const updatedState = {
+        ingredients: updatedIngredients,
+        totalPrice: state.totalPrice + INGREDIENT_PRICES[action.ingType]
+    };
+    return updateObject(state, updatedState);
+}
+
+const removeIng = (state, action) => {
+    const updatedIng = { [action.ingType]: state.ingredients[action.ingType] - 1 };
+    const updatedIngs = updateObject(state.ingredients,updatedIng);
+    const updatedSt = {
+        ingredients: updatedIngs,
+        totalPrice: state.totalPrice + INGREDIENT_PRICES[action.ingType]
+    };
+    return updateObject(state, updatedSt);
+}
+
+const setIng = (state,action) => {
+    return updateObject(state, {
+        ingredients: {
+            salad: action.ingredients.salad,
+            bacon: action.ingredients.bacon,
+            meat: action.ingredients.meat,
+            cheese: action.ingredients.cheese},
+        error: false,
+        totalPrice: 4
+    })
+}
+
+const fetchIngFailed = (state, action) => {
+    return updateObject(state, {error: true})
+}
 const reducer = (state=initialState, action) => {
     switch(action.type){
-        case actionTypes.ADD_ING:
-            return{
-                ...state,
-                ingredients: {
-                    ...state.ingredients,
-                    [action.ingType]: state.ingredients[action.ingType] + 1
-                },
-                totalPrice: state.totalPrice + INGREDIENT_PRICES[action.ingType]
-            }
-        case actionTypes.REMOVE_ING:
-            return{
-                ...state,
-                ingredients: {
-                    ...state.ingredients,
-                    [action.ingType]: state.ingredients[action.ingType] - 1
-                },
-                totalPrice: state.totalPrice - INGREDIENT_PRICES[action.ingType]
-            }
-        case actionTypes.SET_ING:
-            return{
-                ...state,
-                ingredients: {
-                    salad: action.ingredients.salad,
-                    bacon: action.ingredients.bacon,
-                    meat: action.ingredients.meat,
-                    cheese: action.ingredients.cheese,
-                },
-                error: false,
-                totalPrice: 4
-            }
-        case actionTypes.FETCH_ING_FAILED:
-            return{
-                ...state,
-                error: true
-            }
-        default: 
-            return state
+        case actionTypes.ADD_ING: return addIng(state, action);
+        case actionTypes.REMOVE_ING: return removeIng(state,action);
+        case actionTypes.SET_ING: return setIng(state,action);
+        case actionTypes.FETCH_ING_FAILED: return fetchIngFailed(state,action);
+        default: return state
     }
 }
 
