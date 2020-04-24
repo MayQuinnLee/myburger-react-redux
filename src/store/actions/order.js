@@ -42,10 +42,10 @@ export const purchaseInit = () => {
     }
 }
 
-export const fetchOrderSuccess = (order) => {
+export const fetchOrderSuccess = (orders) => {
     return{
         type: actionTypes.FETCH_ORDER_SUCCESS,
-        order: order
+        orders: orders
     }
 }
 
@@ -77,7 +77,7 @@ export const fetchOrders = () => {
                 });
             }
             // console.log(fetchedOrders);
-            dispatch(fetchOrderSuccess(fetchOrders))
+            dispatch(fetchOrderSuccess(fetchedOrders))
         })
         .catch(err=>{
             dispatch(fetchOrderFail(err))
