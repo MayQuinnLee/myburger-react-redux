@@ -69,12 +69,13 @@ class ContactData extends Component {
             email: {
                 elementType: 'input',
                 elementConfig: {
-                    type: 'text',
+                    type: 'email',
                     placeholder: 'Your E-mail'
                 },
                 value: '',
                 validation: {
                     required: true,
+                    isEmail: true,
                 },
                 valid: false,
                 touched: false
@@ -91,7 +92,8 @@ class ContactData extends Component {
                 validation: {},
                 valid: true,
             },
-        }
+        },
+        formIsValid: true,
     }
 
     orderHandler = (event) => {
@@ -119,6 +121,14 @@ class ContactData extends Component {
         if(rules.maxLength){
             isValid = value.length <= rules.maxLength && isValid;
         }
+        if (rules.isEmail) {
+            const pattern = /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/;
+            isValid = pattern.test(value) && isValid
+        }
+        if (rules.isNumeric) {
+            const pattern = /^\d+$/;
+            isValid = pattern.test(value) && isValid
+        }
         return isValid;
     }
 
@@ -130,7 +140,12 @@ class ContactData extends Component {
         updatedFormElement.touched= true;
         updatedOrderForm[inputIdentifier] = updatedFormElement;
         console.log(updatedFormElement);
-        this.setState({orderForm:updatedOrderForm})
+
+        let formIsValid = true;
+        for (let inputIdentifier in updatedOrderForm) {
+            formIsValid = updatedOrderForm[inputIdentifier].valid && formIsValid;}
+            
+        this.setState({orderForm: updatedOrderForm, formIsValid: formIsValid});
     }
 
     render () {
@@ -140,7 +155,7 @@ class ContactData extends Component {
                 id: key,
                 config: this.state.orderForm[key],
             })
-        }
+        };
         let form = (
             <form onSubmit={this.orderHandler}>
               {formElementsArray.map(formElement=>(
@@ -155,7 +170,7 @@ class ContactData extends Component {
                   errorId={formElement.config.elementConfig.placeholder}
                   changed={(event)=>this.inputChangedHandler(event, formElement.id)}/>
                 ))}
-              <Button btnType="Success">ORDER</Button>
+                <Button btnType="Success" disabled={!this.state.formIsValid}>ORDER</Button>
             </form>
         ); 
         if(this.props.loading){
@@ -168,7 +183,7 @@ class ContactData extends Component {
           </div>
         );
     }
-}
+};
 
 const mapStateToProps = state => {
     return {

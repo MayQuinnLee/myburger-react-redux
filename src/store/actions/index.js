@@ -5,9 +5,11 @@ export {
 } from './burgerbuilder.js';
 
 export {
-    purchaseBurgerSuccess,
-    purchaseBurgerFail,
     purchaseBurger,
     purchaseInit,
     fetchOrders
 } from './order';
+
+export{
+    auth,
+} from './auth';

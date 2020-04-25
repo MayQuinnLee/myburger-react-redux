@@ -49,6 +49,7 @@ const setIng = (state,action) => {
 const fetchIngFailed = (state, action) => {
     return updateObject(state, {error: true})
 }
+
 const reducer = (state=initialState, action) => {
     switch(action.type){
         case actionTypes.ADD_ING: return addIng(state, action);
