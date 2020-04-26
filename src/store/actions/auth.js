@@ -4,7 +4,8 @@ import axios from 'axios';
 export const authSuccess = (authData) => {
     return{
         type: actionTypes.AUTH_SUCCESS,
-        authData: authData,
+        idToken: authData.idToken,
+        userId: authData.userId
         };
 };
 
@@ -21,15 +22,19 @@ export const authStart = () => {
         };
 };
 
-export const auth =( email, password) => {
+export const auth =( email, password, isSignup) => {
     return dispatch => {
         dispatch(authStart());
         const authData = {
             email: email,
             password: password,
             returnSecureToken: true,
-        }
-        axios.post('https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyBNzOUD49icpz_sGzBnsSvBW12R1UPS5kU', authData)
+        };
+        let url = 'https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyBNzOUD49icpz_sGzBnsSvBW12R1UPS5kU';
+        if(!isSignup){
+            url = 'https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyBNzOUD49icpz_sGzBnsSvBW12R1UPS5kU'
+        };
+        axios.post(url, authData)
         .then(response => {
             console.log(response);
             dispatch(authSuccess(response.data))
