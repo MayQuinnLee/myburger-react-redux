@@ -22,10 +22,10 @@ export const purchaseBurgerStart = () => {
     }
 }
 
-export const purchaseBurger = (order) => {
+export const purchaseBurger = (order, token) => {
     return dispatch => {
         dispatch(purchaseBurgerStart());
-        axios.post('/orders.json', order) //.json for firebase only
+        axios.post('/orders.json?auth=' + token, order) //.json for firebase only
         .then(response => {
             console.log(response.data) //firebase return an id, but the id is called name = response.data.name
             dispatch(purchaseBurgerSuccess(response.data, order))
@@ -62,10 +62,10 @@ export const fetchOrderStart =() => {
     }
 }
 
-export const fetchOrders = () => {
+export const fetchOrders = (token) => {
     return dispatch => {
         dispatch(fetchOrderStart());
-        axios.get('/orders.json')
+        axios.get('/orders.json?auth=' + token)
         .then(res=>{
             //firebase will return object and we convert to array
             const fetchedOrders =[];

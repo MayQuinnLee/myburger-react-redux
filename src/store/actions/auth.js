@@ -22,18 +22,17 @@ export const authStart = () => {
         };
 };
 
-export const authLogout = () => {
-    return {
-        type: actionTypes.AUTH_LOGOUT,
-    }
-}
-
 export const checkAuthTimeout = (expirationTime) => {
     return dispatch => {
         setTimeout(() => {
-            dispatch(authLogout())            
-            //call dispatch after the expiration time
-        }, expirationTime);
+            dispatch(authLogout());
+        }, expirationTime*1000);
+    };
+};
+
+export const authLogout = () => {
+    return {
+        type: actionTypes.AUTH_LOGOUT,
     }
 }
 
