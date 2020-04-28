@@ -22,4 +22,4 @@ const navigationItems = (props) => (
 
 export default navigationItems;
 
-//this is a dumb component, dont connect to the store, instead use layout a class component to link the data to navigation item, since layout is used to wrap navigationitems
+//this is a dumb component, don't connect to the store, instead use layout a class component to link the data to navigation item, since layout is used to wrap navigationItems

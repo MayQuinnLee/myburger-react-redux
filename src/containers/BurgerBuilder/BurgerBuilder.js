@@ -10,7 +10,6 @@ import Spinner from '../../components/UI/Spinner/Spinner';
 import withErrorHandler from '../../hoc/withErrorHandler/withErrorHandler';
 import * as actions from '../../store/actions/index';
 import axios from '../../axios-orders';
-import { Redirect } from 'react-router-dom';
 
 class BurgerBuilder extends Component {
     // constructor(props) {
@@ -27,9 +26,9 @@ class BurgerBuilder extends Component {
     }
 
     updatePurchaseState () {
-        const sum = Object.keys(this.props.ings)
+        const sum = Object.keys(this.props.ing)
             .map( igKey => {
-                return this.props.ings[igKey];
+                return this.props.ing[igKey];
             } )
             .reduce( ( sum, el ) => {
                 return sum + el;
@@ -58,7 +57,7 @@ class BurgerBuilder extends Component {
 
     render () {
         const disabledInfo = {
-            ...this.props.ings
+            ...this.props.ing
         };
         for ( let key in disabledInfo ) {
             disabledInfo[key]= disabledInfo[key] <= 0
@@ -70,10 +69,10 @@ class BurgerBuilder extends Component {
 
         let burger = this.props.error ? <p> Ingredients can't be loaded </p> : <Spinner />
 
-        if(this.props.ings){
+        if(this.props.ing){
             burger = (
               <Aux>
-                <Burger ingredients={this.props.ings} />
+                <Burger ingredients={this.props.ing} />
                 <BuildControls
                   ingredientAdded={this.props.onAddIngredient}
                   ingredientRemoved={this.props.onRemoveIngredient}
@@ -86,7 +85,7 @@ class BurgerBuilder extends Component {
               </Aux>
             );
             orderSummary = (<OrderSummary
-                    ingredients={this.props.ings}
+                    ingredients={this.props.ing}
                     price={this.props.totalP}
                     purchaseCancelled={this.purchaseCancelHandler}
                     purchaseContinued={this.purchaseContinueHandler}
@@ -107,7 +106,7 @@ class BurgerBuilder extends Component {
 
 const mapStateToProps = state => {
     return {
-        ings: state.burgerBuilder.ingredients,
+        ing: state.burgerBuilder.ingredients,
         totalP: state.burgerBuilder.totalPrice,
         error: state.burgerBuilder.error,
         isAuthenticated: state.auth.token !== null,

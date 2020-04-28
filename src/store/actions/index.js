@@ -2,7 +2,7 @@ export {
     addIng,
     removeIng,
     initIng
-} from './burgerbuilder.js';
+} from './burgerBuilder.js';
 
 export {
     purchaseBurger,
@@ -14,4 +14,5 @@ export{
     auth,
     authLogout,
     setAuthRedirectPath,
+    authCheckState
 } from './auth';
